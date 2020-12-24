@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Validate yml:
+  Validate-yml:
     runs-on: ubuntu-latest
 
     env:
