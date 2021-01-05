@@ -6,10 +6,8 @@ inputs:
     required: true
     default: './helm'
 runs:
-  using: "composite"
-  steps: 
-    - run: |
-          helm dependency update ${{ inputs.chart-path }}
-          helm lint --strict ${{ inputs.chart-path }}
-          helm template ${{ inputs.chart-path }}
-      shell: sh
+  using: 'docker'
+  image: '../dockerfile'
+  args: 
+    - validate
+    - ${{ inputs.chart-path }}
