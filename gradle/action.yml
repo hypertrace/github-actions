@@ -1,4 +1,5 @@
 name: 'Gradle command action'
+description: 'standardizes the CLI flags for gradle'
 inputs:
   args:
     required: true
