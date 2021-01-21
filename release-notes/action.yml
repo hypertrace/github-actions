@@ -9,7 +9,7 @@ runs:
   steps: 
     - run: |
         npm install github-release-notes@0.17.3 -g
-        GREN_GITHUB_TOKEN=$GITHUB_TOKEN gren release --username=$username --repo=$repository -c .grenrc.js --override
+        gren release --username=$username --repo=$repository -c .grenrc.js --override
       shell: bash
       env:
         GREN_GITHUB_TOKEN: ${{ inputs.gren-github-token }}
