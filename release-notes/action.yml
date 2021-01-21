@@ -1,14 +1,12 @@
-name: 'Release notes action'
-description: 'standardizes the CLI flags for gradle'
+name: "GitHub Release Notes"
+description: "GitHub release notes and changelog generator using Gren"
 inputs:
-  gren-github-token: # Replaces $HELM_GCS_REPOSITORY env var. Assumes only one or other is set
-    description: 'GitHub token for Gren'
+  options:  # Add the gren options here
+    description: 'Add the gren options here; e.g. " --override --prerelease"'
     required: false
+    default: '-c .grenrc.js --override'
 runs:
-  using: "composite"
-  steps: 
-    - run: |
-        npx gren release --username=$username --repo=$repository -c .grenrc.js --override
-      shell: bash
-      env:
-        GREN_GITHUB_TOKEN: ${{ inputs.gren-github-token }}
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.options }}
