@@ -2,11 +2,15 @@ name: "GitHub Release Notes"
 description: "GitHub release notes and changelog generator using Gren"
 inputs:
   options:  # Add the gren options here
-    description: 'Add the gren options here; e.g. " --override --prerelease"'
-    required: false
-    default: '-c .grenrc.js --override'
+    description: 'Add the gren options here; e.g. " --prerelease"'
+    required: true
+    default: ''
+  github-token:
+    description: 'github token with permissions to post release notes'
+    required: true
 runs:
   using: "docker"
   image: "Dockerfile"
   args:
+    - ${{ inputs.github-token }}
     - ${{ inputs.options }}
