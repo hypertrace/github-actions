@@ -1,0 +1,13 @@
+name: 'Release notes action'
+description: 'standardizes the CLI flags for gradle'
+inputs:
+  gren-github-token: # Replaces $HELM_GCS_REPOSITORY env var. Assumes only one or other is set
+    description: 'GitHub token for Gren'
+    required: false
+runs:
+  using: "composite"
+  steps: 
+    - run: npx gren release --data-source=commits --override
+      shell: bash
+      env:
+        GREN_GITHUB_TOKEN: ${{ inputs.gren-github-token }}
