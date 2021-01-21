@@ -13,7 +13,7 @@ if [ ! -f "$REPO_GREN_RC" ]; then
   REPO_USING_TEMPLATE=true
 fi
 
-npx -p github-release-note@$GREN_VERSION gren release --token=$1 --username=$username --repo=$repository --config $REPO_GREN_RC --override $2
+npx -p github-release-notes@$GREN_VERSION gren release --token=$1 --username=$username --repo=$repository --config $REPO_GREN_RC --override $2
 # save exit code
 EXIT_CODE=$?
 
