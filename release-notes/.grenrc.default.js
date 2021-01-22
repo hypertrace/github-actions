@@ -1,6 +1,6 @@
 module.exports = {
     "dataSource": "prs",
-    "prefix": "",
+    "prefix": "Release v",
     "onlyMilestones": false,
     "ignoreIssuesWith": ["no-release", "wontfix", "question"],
     "ignoreTagsWith": ["-rc", "-alpha", "-beta", "test", "current"],
