@@ -14,7 +14,7 @@ module.exports = {
       "Minor Fixes": ["chore", "refactor", "perf", "test", "style"],
       "Config": ["config", "helm"],
       "CI": ["ci"],
-      "Changes": []
+      "Changes": ["closed"]
   },
   "template": {
       commit: ({ message, url, author, name }) => `- [${message}](${url}) - ${author ? `@${author}` : name}`,
