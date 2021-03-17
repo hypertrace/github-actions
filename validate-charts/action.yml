@@ -5,9 +5,15 @@ inputs:
     description: 'Path to helm chart directory'
     required: true
     default: './helm'
+  extra-args:
+    description: 'Arguments to be appended to lint and template commands such as "--set global.env=dev"'
+    required: true
+    default: ''
+
 runs:
   using: 'docker'
   image: '../helm.dockerfile'
-  args: 
+  args:
     - validate
     - ${{ inputs.chart-path }}
+    - ${{ inputs.extra-args }}
