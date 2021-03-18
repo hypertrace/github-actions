@@ -3,8 +3,8 @@
 if [ $1 == "validate" ]; then
     echo "validating helm charts"
     helm dependency update $2
-    helm lint --strict $2
-    helm template $2
+    helm lint --strict $2 $3
+    helm template $2 $3
 
 elif [ $1 == "publish" ]; then
     CHART_VERSION=$(echo ${GITHUB_REF} | cut -d/ -f 3)
