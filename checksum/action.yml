@@ -3,5 +3,5 @@ description: 'Generates checksum for caching'
 runs:
   using: "composite"
   steps: 
-    - run: find . -type f -name "*.gradle*" -o -name "gradle-wrapper*" | xargs shasum | sort > checksum.txt && cat checksum.txt
+    - run: find . -type f -name "*.gradle*" -o -name "gradle-wrapper*" -o -path "./gradle/*"| xargs shasum | sort > checksum.txt && cat checksum.txt
       shell: bash
