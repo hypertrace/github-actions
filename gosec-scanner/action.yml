@@ -1,0 +1,22 @@
+name: GoSec Scan
+description: 'GoSec Scanner for go repositories'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Gosec Security Scanner
+      uses: securego/gosec@v2.13.1
+      id: gosec-scan
+      with:
+        args: '-fmt=text -out=gosec-report.txt ./...'
+      continue-on-error: true
+    
+    - name: Gosec Security Scanner Result
+      uses: LouisBrunner/checks-action@v1.3.1
+      with:
+        token: ${{ github.token }}
+        name: Gosec Security Scan Result
+        conclusion: ${{ steps.gosec-scan.outcome }}
+        output_text_description_file: gosec-report.txt
+        output: |
+          {"summary": "Gosec Security Scanner Result"}
