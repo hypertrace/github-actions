@@ -1,0 +1,23 @@
+name: Dependency Check
+description: 'OWASP Dependency Check'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Dependency Check
+      uses: hypertrace/github-actions/gradle@main
+      with:
+        args: dependencyCheckAggregate
+
+    - name: Upload dependency check report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: Dependency check report
+        path: ${{github.workspace}}/build/reports
+
+    - name: Upload dependency check report to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: ${{github.workspace}}/build/reports/dependency-check-report.sarif
