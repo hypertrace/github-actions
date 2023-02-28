@@ -1,9 +1,12 @@
 name: Trivy Image Scan
 description: 'Trivy Image Scan'
 inputs:
-  image-ref:
-    description: 'image reference'
+  image:
+    description: 'image name'
     required: true
+  tag:
+    description: 'image tag'
+    required: false
   ignore-unfixed:
     description: 'ignore unfixed vulnerabilities'
     required: true
@@ -35,11 +38,30 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Determine container tag
+      if: "${{ github.event.inputs.tag == '' }}"
+      id: tag
+      run: echo tag=$(./gradlew -q printDockerImageDefaultTag | head -1) >> $GITHUB_OUTPUT
+
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
+      if: "${{ github.event.inputs.tag == '' }}"
       with:
         trivyignores: ${{ inputs.trivyignores }}
-        image-ref: ${{ inputs.image-ref }}
+        image-ref: ${{ inputs.image }}:${{ steps.tag.outputs.tag }}
+        format: ${{ inputs.format }}
+        output: ${{ inputs.output }}
+        vuln-type: ${{ inputs.vuln-type }}
+        severity: ${{ inputs.severity }}
+        ignore-unfixed: ${{ inputs.ignore-unfixed }}
+        timeout: ${{ inputs.timeout }}
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      if: "${{ github.event.inputs.tag != '' }}"
+      with:
+        trivyignores: ${{ inputs.trivyignores }}
+        image-ref: ${{ inputs.image }}:${{ inputs.tag }}
         format: ${{ inputs.format }}
         output: ${{ inputs.output }}
         vuln-type: ${{ inputs.vuln-type }}
