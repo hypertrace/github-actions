@@ -1,0 +1,69 @@
+name: Trivy Image Scan
+description: 'Trivy Image Scan'
+inputs:
+  image:
+    description: 'image name'
+    required: true
+  tag:
+    description: 'image tag'
+    required: false
+  ignore-unfixed:
+    description: 'ignore unfixed vulnerabilities'
+    required: true
+    default: 'false'
+  vuln-type:
+    description: 'comma-separated list of vulnerability types (os,library)'
+    required: true
+    default: 'os,library'
+  severity:
+    description: 'severities of vulnerabilities to be displayed'
+    required: true
+    default: 'HIGH,CRITICAL'
+  output:
+    description: 'writes results to a file with the specified file name'
+    required: true
+    default: 'trivy-results.sarif'
+  timeout:
+    description: 'timeout (default 5m0s)'
+    required: true
+    default: '5m0s'
+  trivyignores:
+    description: 'comma-separated list of relative paths in repository to one or more .trivyignore files'
+    required: true
+    default: '.trivyignore'
+  format:
+    description: 'output format (table, json, template)'
+    required: true
+    default: 'sarif'
+runs:
+  using: "composite"
+  steps:
+    - name: Determine container tag
+      if: "${{ github.event.inputs.tag == '' }}"
+      shell: bash
+      run: |
+        echo "IMAGE_TAG=$(./gradlew -q printDockerImageDefaultTag | head -1)" >> $GITHUB_ENV
+
+    - name: Determine container tag
+      if: "${{ github.event.inputs.tag != '' }}"
+      shell: bash
+      run: |
+        echo "IMAGE_TAG=${{ inputs.tag }}" >> $GITHUB_ENV
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        trivyignores: ${{ inputs.trivyignores }}
+        image-ref: ${{ inputs.image }}:${{ env.IMAGE_TAG }}
+        format: ${{ inputs.format }}
+        output: ${{ inputs.output }}
+        vuln-type: ${{ inputs.vuln-type }}
+        severity: ${{ inputs.severity }}
+        ignore-unfixed: ${{ inputs.ignore-unfixed }}
+        timeout: ${{ inputs.timeout }}
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: ${{ inputs.output }}
