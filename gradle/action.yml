@@ -7,6 +7,12 @@ inputs:
 runs:
   using: "composite"
   steps: 
-    - run: |
-          ./gradlew ${{ inputs.args }} --info --max-workers=2 -Dorg.gradle.jvmargs=-Xmx2g -Dorg.gradle.console=plain --continue
-      shell: sh
+    - uses: gradle/gradle-build-action@v2
+      with:
+        arguments: |
+          ${{ inputs.args }}
+          --info
+          --max-workers=2
+          -Dorg.gradle.jvmargs=-Xmx4g
+          -Dorg.gradle.console=plain 
+          --continue
