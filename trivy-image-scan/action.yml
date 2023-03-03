@@ -51,6 +51,11 @@ runs:
       run: |
         echo "IMAGE_TAG=${{ inputs.tag }}" >> $GITHUB_ENV
 
+    - name: Default ignore file if not exist
+      shell: bash
+      run: | # If a non-default ignore is passed, then we can assume it exists
+        touch .trivyignore
+
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
@@ -66,5 +71,6 @@ runs:
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
       if: always()
+      continue-on-error: true # Not required if security not enabled
       with:
         sarif_file: ${{ inputs.output }}
