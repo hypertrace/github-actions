@@ -38,6 +38,7 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: gradle/gradle-build-action@v2
     - name: Determine container tag
       if: "${{ github.event.inputs.tag == '' }}"
       shell: bash
