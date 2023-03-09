@@ -19,10 +19,6 @@ inputs:
     description: 'severities of vulnerabilities to be displayed'
     required: true
     default: 'HIGH,CRITICAL'
-  output:
-    description: 'writes results to a file with the specified file name'
-    required: true
-    default: 'trivy-results.sarif'
   timeout:
     description: 'timeout (default 5m0s)'
     required: true
@@ -31,29 +27,44 @@ inputs:
     description: 'comma-separated list of relative paths in repository to one or more .trivyignore files'
     required: true
     default: '.trivyignore'
-  format:
-    description: 'output format (table, json, template)'
+  output-mode:
+    description: 'Upload to github security via sarif format (github), or log pretty print output (log)'
     required: true
-    default: 'sarif'
+    default: 'github'
 runs:
   using: "composite"
   steps:
     - uses: gradle/gradle-build-action@v2
     - name: Determine container tag
-      if: "${{ github.event.inputs.tag == '' }}"
+      if: ${{ github.event.inputs.tag == '' }}
       shell: bash
       run: |
         echo "IMAGE_TAG=$(./gradlew -q printDockerImageDefaultTag | head -1)" >> $GITHUB_ENV
 
     - name: Determine container tag
-      if: "${{ github.event.inputs.tag != '' }}"
+      if: ${{ github.event.inputs.tag != '' }}
       shell: bash
       run: |
         echo "IMAGE_TAG=${{ inputs.tag }}" >> $GITHUB_ENV
 
-    - name: Default ignore file if not exist
+    - name: Set up output values
+      if: ${{ inputs.output-mode == 'github' }}
       shell: bash
-      run: | # If a non-default ignore is passed, then we can assume it exists
+      run: |
+        echo "FORMAT=sarif" >> $GITHUB_ENV
+        echo "OUTPUT=''trivy-results.sarif''" >> $GITHUB_ENV
+
+    - name: Set up output values
+      if: ${{ inputs.output-mode == 'log' }}
+      shell: bash
+      run: |
+        echo "FORMAT=table" >> $GITHUB_ENV
+        echo "OUTPUT=''" >> $GITHUB_ENV
+
+    - name: Default ignore file if not exist
+      if: ${{ inputs.trivyignores == '.trivyignore' }}  # If a non-default ignore is passed, then we can assume it exists
+      shell: bash
+      run: |
         touch .trivyignore
 
     - name: Run Trivy vulnerability scanner
@@ -61,8 +72,8 @@ runs:
       with:
         trivyignores: ${{ inputs.trivyignores }}
         image-ref: ${{ inputs.image }}:${{ env.IMAGE_TAG }}
-        format: ${{ inputs.format }}
-        output: ${{ inputs.output }}
+        format: ${{ env.FORMAT }}
+        output: ${{ env.OUTPUT }}
         vuln-type: ${{ inputs.vuln-type }}
         severity: ${{ inputs.severity }}
         ignore-unfixed: ${{ inputs.ignore-unfixed }}
@@ -70,7 +81,6 @@ runs:
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
-      if: always()
-      continue-on-error: true # Not required if security not enabled
+      if: ${{ always() && inputs.output-mode == 'github' }}
       with:
-        sarif_file: ${{ inputs.output }}
+        sarif_file: ${{ env.OUTPUT }}
