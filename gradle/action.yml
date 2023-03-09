@@ -2,8 +2,8 @@ name: 'Gradle command action'
 description: 'standardizes the CLI flags for gradle'
 inputs:
   args:
-    description: 'command you want to execute'
-    required: true
+    description: 'command you want to execute. If omitted, gradle is set up without executing any tasks'
+    required: false
 runs:
   using: "composite"
   steps: 
