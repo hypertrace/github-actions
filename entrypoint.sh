@@ -1,5 +1,9 @@
 #!/bin/sh -l
 
+if [ -n "$4" -a -n "$5" -a -n "$6" -a -n "$7" ]; then
+    helm repo add "$4" "$5" --username "$6" --password "$7"
+fi
+
 if [ $1 == "validate" ]; then
     echo "validating helm charts"
     helm dependency update $2
