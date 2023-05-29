@@ -1,11 +1,10 @@
 #!/bin/sh -l
 
-if [ -n "$5" -a -n "$6" -a -n "$7" -a -n "$8" ]; then
-    helm repo add "$5" "$6" --username "$7" --password "$8"
-fi
-
 if [ $1 == "validate" ]; then
     echo "validating helm charts"
+    if [ -n "$4" -a -n "$5" -a -n "$6" -a -n "$7" ]; then
+        helm repo add "$4" "$5" --username "$6" --password "$7"
+    fi
     helm dependency update $2
     helm lint --strict $2 $3
     helm template $2 $3

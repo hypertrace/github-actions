@@ -32,7 +32,6 @@ runs:
     - validate
     - ${{ inputs.chart-path }}
     - ${{ inputs.extra-args }}
-    - ""
     - ${{ inputs.repo-name }}
     - ${{ inputs.repo-url }}
     - ${{ inputs.repo-username }}
