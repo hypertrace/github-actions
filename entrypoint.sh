@@ -1,7 +1,7 @@
 #!/bin/sh -l
 
-if [ -n "$4" -a -n "$5" -a -n "$6" -a -n "$7" ]; then
-    helm repo add "$4" "$5" --username "$6" --password "$7"
+if [ -n "$5" -a -n "$6" -a -n "$7" -a -n "$8" ]; then
+    helm repo add "$5" "$6" --username "$7" --password "$8"
 fi
 
 if [ $1 == "validate" ]; then
