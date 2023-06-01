@@ -28,7 +28,7 @@ inputs:
     required: true
     default: '.trivyignore'
   output-mode:
-    description: 'Upload to github security via sarif format (github), or log pretty print output (log)'
+    description: 'Upload to github security via sarif format (github), or output to a file named "trivy.json" (json), or log pretty print output (log)'
     required: true
     default: 'log'
 runs:
@@ -53,6 +53,13 @@ runs:
       run: |
         echo "FORMAT=sarif" >> $GITHUB_ENV
         echo "OUTPUT=''trivy-results.sarif''" >> $GITHUB_ENV
+    
+    - name: Set up output values
+      if: ${{ inputs.output-mode == 'json' }}
+      shell: bash
+      run: |
+        echo "FORMAT=json" >> $GITHUB_ENV
+        echo "OUTPUT=''trivy-results.json''" >> $GITHUB_ENV
 
     - name: Set up output values
       if: ${{ inputs.output-mode == 'log' }}
