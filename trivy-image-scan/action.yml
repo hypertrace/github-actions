@@ -28,7 +28,7 @@ inputs:
     required: true
     default: '.trivyignore'
   output-mode:
-    description: 'Upload to github security via sarif format (github), or log pretty print output (log)'
+    description: 'Upload to github security via sarif format (github),or upload to defectdojo via json format (json), or log pretty print output (log)'
     required: true
     default: 'log'
 runs:
