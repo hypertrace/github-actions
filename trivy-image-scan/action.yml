@@ -61,6 +61,7 @@ runs:
         echo "FORMAT=json" >> $GITHUB_ENV
         echo "OUTPUT=trivy-results.json" >> $GITHUB_ENV
 
+
     - name: Set up output values
       if: ${{ inputs.output-mode == 'log' }}
       shell: bash
