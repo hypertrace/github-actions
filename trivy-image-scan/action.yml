@@ -93,3 +93,10 @@ runs:
       if: ${{ (success() || failure()) && inputs.output-mode == 'github' }}
       with:
         sarif_file: ${{ env.OUTPUT }}
+    
+    - name: unset env variables
+      shell: bash
+      run: |
+        echo "FORMAT=" >> $GITHUB_ENV
+        echo "OUTPUT=" >> $GITHUB_ENV
+        echo "IMAGE_TAG=" >> $GITHUB_ENV
