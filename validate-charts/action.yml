@@ -11,8 +11,9 @@ inputs:
     default: ''
 runs:
   using: "composite"
-  name: validate helm chart
-  run: |
-    helm dependency update ${{ inputs.chart-path }}
-    helm lint --strict ${{ inputs.chart-path }} ${{ inputs.extra-args }}
-    helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
+  steps:
+    - name: validate helm chart
+      run: |
+        helm dependency update ${{ inputs.chart-path }}
+        helm lint --strict ${{ inputs.chart-path }} ${{ inputs.extra-args }}
+        helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
