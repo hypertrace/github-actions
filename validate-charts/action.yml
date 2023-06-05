@@ -9,30 +9,10 @@ inputs:
     description: 'Arguments to be appended to lint and template commands such as "--set global.env=dev"'
     required: true
     default: ''
-  repo-name:
-    description: 'Name of helm repository to be added'
-    required: false
-    default: ''
-  repo-url:
-    description: 'URL of helm repository to be added'
-    required: false
-    default: ''
-  repo-username:
-    description: 'helm repository username'
-    required: false
-    default: ''
-  repo-password:
-    description: 'helm repository password'
-    required: false
-    default: ''
 runs:
-  using: 'docker'
-  image: '../helm.dockerfile'
-  args:
-    - validate
-    - ${{ inputs.chart-path }}
-    - ${{ inputs.extra-args }}
-    - ${{ inputs.repo-name }}
-    - ${{ inputs.repo-url }}
-    - ${{ inputs.repo-username }}
-    - ${{ inputs.repo-password }}
+  using: "composite"
+  name: validate helm chart
+  run: |
+    helm dependency update ${{ inputs.chart-path }}
+    helm lint --strict ${{ inputs.chart-path }} ${{ inputs.extra-args }}
+    helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
