@@ -67,6 +67,7 @@ runs:
       shell: bash
       run: |
         echo "FORMAT=table" >> $GITHUB_ENV
+        echo "OUTPUT=" >> $GITHUB_ENV
 
     - name: Default ignore file if not exist
       if: ${{ inputs.trivyignores == '.trivyignore' }}  # If a non-default ignore is passed, then we can assume it exists
