@@ -34,6 +34,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: clean env variables
+      if: always()
+      shell: bash
+      run: |
+        echo "FORMAT=" >> $GITHUB_ENV
+        echo "OUTPUT=" >> $GITHUB_ENV
+        echo "IMAGE_TAG=" >> $GITHUB_ENV
+    
     - uses: gradle/gradle-build-action@v2
     - name: Determine container tag
       if: ${{ github.event.inputs.tag == '' }}
@@ -93,10 +101,3 @@ runs:
       if: ${{ (success() || failure()) && inputs.output-mode == 'github' }}
       with:
         sarif_file: ${{ env.OUTPUT }}
-    
-    - name: unset env variables
-      shell: bash
-      run: |
-        echo "FORMAT=" >> $GITHUB_ENV
-        echo "OUTPUT=" >> $GITHUB_ENV
-        echo "IMAGE_TAG=" >> $GITHUB_ENV
