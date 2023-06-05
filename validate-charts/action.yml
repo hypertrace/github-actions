@@ -13,6 +13,7 @@ runs:
   using: "composite"
   steps:
     - name: validate helm chart
+      shell: bash
       run: |
         helm dependency update ${{ inputs.chart-path }}
         helm lint --strict ${{ inputs.chart-path }} ${{ inputs.extra-args }}
