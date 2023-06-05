@@ -35,7 +35,6 @@ runs:
   using: "composite"
   steps:
     - name: clean env variables
-      if: always()
       shell: bash
       run: |
         echo "FORMAT=" >> $GITHUB_ENV
