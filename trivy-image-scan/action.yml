@@ -28,37 +28,52 @@ inputs:
     required: true
     default: '.trivyignore'
   output-mode:
-    description: 'Upload to github security via sarif format (github), or log pretty print output (log)'
+    description: 'Upload to github security via sarif format (github), or output to a file named "trivy.json" (json), or log pretty print output (log)'
     required: true
     default: 'log'
 runs:
   using: "composite"
   steps:
+    - name: clean env variables
+      shell: bash
+      run: |
+        echo "TRIVY_FORMAT=" >> $GITHUB_ENV
+        echo "TRIVY_OUTPUT=" >> $GITHUB_ENV
+        echo "TRIVY_IMAGE_TAG=" >> $GITHUB_ENV
+    
     - uses: gradle/gradle-build-action@v2
     - name: Determine container tag
       if: ${{ github.event.inputs.tag == '' }}
       shell: bash
       run: |
-        echo "IMAGE_TAG=$(./gradlew -q printDockerImageDefaultTag | head -1)" >> $GITHUB_ENV
+        echo "TRIVY_IMAGE_TAG=$(./gradlew -q printDockerImageDefaultTag | head -1)" >> $GITHUB_ENV
 
     - name: Determine container tag
       if: ${{ github.event.inputs.tag != '' }}
       shell: bash
       run: |
-        echo "IMAGE_TAG=${{ inputs.tag }}" >> $GITHUB_ENV
+        echo "TRIVY_IMAGE_TAG=${{ inputs.tag }}" >> $GITHUB_ENV
 
     - name: Set up output values
       if: ${{ inputs.output-mode == 'github' }}
       shell: bash
       run: |
-        echo "FORMAT=sarif" >> $GITHUB_ENV
-        echo "OUTPUT=''trivy-results.sarif''" >> $GITHUB_ENV
+        echo "TRIVY_FORMAT=sarif" >> $GITHUB_ENV
+        echo "TRIVY_OUTPUT=''trivy-results.sarif''" >> $GITHUB_ENV
+    
+    - name: Set up output values
+      if: ${{ inputs.output-mode == 'json' }}
+      shell: bash
+      run: |
+        echo "TRIVY_FORMAT=json" >> $GITHUB_ENV
+        echo "TRIVY_OUTPUT=trivy-results.json" >> $GITHUB_ENV
+
 
     - name: Set up output values
       if: ${{ inputs.output-mode == 'log' }}
       shell: bash
       run: |
-        echo "FORMAT=table" >> $GITHUB_ENV
+        echo "TRIVY_FORMAT=table" >> $GITHUB_ENV
 
     - name: Default ignore file if not exist
       if: ${{ inputs.trivyignores == '.trivyignore' }}  # If a non-default ignore is passed, then we can assume it exists
@@ -70,9 +85,9 @@ runs:
       uses: aquasecurity/trivy-action@master
       with:
         trivyignores: ${{ inputs.trivyignores }}
-        image-ref: ${{ inputs.image }}:${{ env.IMAGE_TAG }}
-        format: ${{ env.FORMAT }}
-        output: ${{ env.OUTPUT }}
+        image-ref: ${{ inputs.image }}:${{ env.TRIVY_IMAGE_TAG }}
+        format: ${{ env.TRIVY_FORMAT }}
+        output: ${{ env.TRIVY_OUTPUT }}
         vuln-type: ${{ inputs.vuln-type }}
         severity: ${{ inputs.severity }}
         ignore-unfixed: ${{ inputs.ignore-unfixed }}
@@ -83,4 +98,4 @@ runs:
       uses: github/codeql-action/upload-sarif@v2
       if: ${{ (success() || failure()) && inputs.output-mode == 'github' }}
       with:
-        sarif_file: ${{ env.OUTPUT }}
+        sarif_file: ${{ env.TRIVY_OUTPUT }}
