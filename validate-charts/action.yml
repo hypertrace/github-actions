@@ -17,5 +17,5 @@ runs:
       run: |
         helm version
         helm dependency update ${{ inputs.chart-path }}
-        helm lint --strict ${{ inputs.chart-path }} ${{ inputs.extra-args }}
+        helm lint --with-subcharts ${{ inputs.chart-path }} ${{ inputs.extra-args }}
         helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
