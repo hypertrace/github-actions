@@ -9,11 +9,13 @@ inputs:
     description: 'Arguments to be appended to lint and template commands such as "--set global.env=dev"'
     required: true
     default: ''
-
 runs:
-  using: 'docker'
-  image: '../helm.dockerfile'
-  args:
-    - validate
-    - ${{ inputs.chart-path }}
-    - ${{ inputs.extra-args }}
+  using: "composite"
+  steps:
+    - name: validate helm chart
+      shell: bash
+      run: |
+        helm version
+        helm dependency update ${{ inputs.chart-path }}
+        helm lint ${{ inputs.chart-path }} ${{ inputs.extra-args }}
+        helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
