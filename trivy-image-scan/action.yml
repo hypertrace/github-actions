@@ -35,6 +35,7 @@ runs:
   using: "composite"
   steps:
     - uses: gradle/gradle-build-action@v2
+      if: ${{ inputs.tag == '' }}
 
     - name: Determine container tag
       id: tag
