@@ -70,12 +70,8 @@ runs:
           TRIVY_FORMAT="table"
           TRIVY_OUTPUT=""
         fi
-        if [ -n "$TRIVY_FORMAT" ]; then
-          echo "TRIVY_FORMAT=$TRIVY_FORMAT" >> $GITHUB_OUTPUT
-        fi
-        if [ -n "$TRIVY_OUTPUT" ]; then
-          echo "TRIVY_OUTPUT=$TRIVY_OUTPUT" >> $GITHUB_OUTPUT
-        fi
+        echo "TRIVY_FORMAT=$TRIVY_FORMAT" >> $GITHUB_OUTPUT
+        echo "TRIVY_OUTPUT=$TRIVY_OUTPUT" >> $GITHUB_OUTPUT
 
     - name: Default ignore file if not exist
       if: ${{ inputs.trivyignores == '.trivyignore' }}  # If a non-default ignore is passed, then we can assume it exists
