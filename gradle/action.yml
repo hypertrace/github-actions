@@ -4,6 +4,14 @@ inputs:
   args:
     description: 'command you want to execute. If omitted, gradle is set up without executing any tasks'
     required: false
+  max-workers:
+    description: 'max workers to allocate to gradle'
+    required: true
+    default: '2'
+  max-heap:
+    description: 'max heap to allocate to gradle'
+    required: true
+    default: '6g'
 runs:
   using: "composite"
   steps: 
@@ -11,8 +19,8 @@ runs:
       with:
         arguments: |
           --info
-          --max-workers=2
-          -Dorg.gradle.jvmargs=-Xmx4g
+          --max-workers=${{ inputs.max-workers }}
+          -Dorg.gradle.jvmargs=-Xmx${{ inputs.max-heap }}
           -Dorg.gradle.console=plain 
           --continue
           ${{ inputs.args }}
