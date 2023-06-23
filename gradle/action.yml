@@ -11,7 +11,7 @@ inputs:
   max-heap:
     description: 'max heap to allocate to gradle'
     required: true
-    default: '4g'
+    default: '6g'
 runs:
   using: "composite"
   steps: 
