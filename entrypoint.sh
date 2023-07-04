@@ -7,7 +7,12 @@ if [ $1 == "validate" ]; then
     helm template $2 $3
 
 elif [ $1 == "publish" ]; then
+    echo $GITHUB_REF
     CHART_VERSION=$(echo ${GITHUB_REF} | cut -d/ -f 3)
+    if [ -z "$CHART_VERSION" ]; then
+        CHART_VERSION=$(git describe --abbrev=0 --tags)
+    fi
+    echo $CHART_VERSION
     CHART_NAME=$(awk '/^name:/ {print $2}' $2/Chart.yaml)
     INPUT_REPOSITORY=$3
     INPUT_CREDENTIALS=$4
