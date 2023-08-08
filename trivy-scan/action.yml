@@ -1,6 +1,15 @@
-name: Trivy FS Scan
-description: 'Trivy File System Scan'
+name: Trivy Scan
+description: 'Trivy Scan'
 inputs:
+  scan-type:
+    description: 'Scan type eg: image, fs'
+    default: 'image'
+  image:
+    description: 'image name'
+    required: true
+  tag:
+    description: 'image tag'
+    required: false
   scan-ref:
     description: 'scan reference'
     default: '.'
@@ -8,6 +17,10 @@ inputs:
     description: 'ignore unfixed vulnerabilities'
     required: true
     default: 'false'
+  vuln-type:
+    description: 'comma-separated list of vulnerability types (os,library)'
+    required: true
+    default: 'os,library'
   severity:
     description: 'severities of vulnerabilities to be displayed'
     required: true
@@ -31,6 +44,20 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: gradle/gradle-build-action@v2
+      if: ${{ inputs.tag == '' && inputs.scan-type == 'image' }}
+
+    - name: Determine container tag
+      if: ${{ inputs.scan-type == 'image' }}
+      id: tag
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.tag }}" ]; then
+          echo "TRIVY_IMAGE_TAG=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "TRIVY_IMAGE_TAG=$(./gradlew -q printDockerImageDefaultTag | head -1)" >> $GITHUB_OUTPUT
+        fi
+
     - name: Set up output values
       id: output
       shell: bash
@@ -60,6 +87,21 @@ runs:
         touch .trivyignore
 
     - name: Run Trivy vulnerability scanner
+      if: ${{ inputs.scan-type == 'image' }}
+      uses: aquasecurity/trivy-action@master
+      with:
+        trivyignores: ${{ inputs.trivyignores }}
+        image-ref: ${{ inputs.image }}:${{ steps.tag.outputs.TRIVY_IMAGE_TAG }}
+        format: ${{ steps.output.outputs.TRIVY_FORMAT }}
+        output: ${{ steps.output.outputs.TRIVY_OUTPUT }}
+        vuln-type: ${{ inputs.vuln-type }}
+        severity: ${{ inputs.severity }}
+        ignore-unfixed: ${{ inputs.ignore-unfixed }}
+        timeout: ${{ inputs.timeout }}
+        exit-code: '1'
+    
+    - name: Run Trivy vulnerability scanner
+      if: ${{ inputs.scan-type == 'fs' }}
       uses: aquasecurity/trivy-action@master
       with:
         scan-type: 'fs'
