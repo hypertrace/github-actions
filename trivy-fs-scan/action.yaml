@@ -12,6 +12,10 @@ inputs:
     description: 'comma-separated list of vulnerability types (os,library)'
     required: true
     default: 'library'
+  scanners:
+    description: 'comma-separated list of what security issues to detect (vuln,secret,config)'
+    required: true
+    default: 'vuln'
   severity:
     description: 'severities of vulnerabilities to be displayed'
     required: true
@@ -69,6 +73,7 @@ runs:
         scan-type: 'fs'
         scan-ref: ${{ inputs.scan-ref }}
         vuln-type: ${{ inputs.vuln-type }}
+        scanners: ${{ inputs.scanners }}
         trivyignores: ${{ inputs.trivyignores }}
         format: ${{ steps.output.outputs.TRIVY_FORMAT }}
         output: ${{ steps.output.outputs.TRIVY_OUTPUT }}
