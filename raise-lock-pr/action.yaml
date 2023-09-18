@@ -1,6 +1,9 @@
 name: Update Gradle lockfiles and raise PR
 description: If any lockfiles are outdated, updates them and raises a pull request
-
+inputs:
+  token:
+    description: 'Github auth token with permissions to raise a PR'
+    required: true
 runs:
   using: composite
   steps:
@@ -17,3 +20,4 @@ runs:
         commit-message: Update gradle locks
         delete-branch: true
         branch-suffix: timestamp
+        token: ${{ inputs.token }}
