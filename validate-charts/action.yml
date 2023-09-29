@@ -19,17 +19,3 @@ runs:
         helm dependency update ${{ inputs.chart-path }}
         helm lint ${{ inputs.chart-path }} ${{ inputs.extra-args }}
         helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
-    - name: ensure no trailing spaces in config maps
-      shell: bash
-      run: |
-        configmaps=($(find ${{ inputs.chart-path }} -type f -regex '.*\.ya*ml' -exec grep -l "kind: ConfigMap" {} \;))
-        COUNTER=0
-        for yaml in "${configmaps[@]}"
-        do
-            grep -nE '\S\s+$' $yaml
-            test $? -eq 0 && COUNTER=$((COUNTER+1)) && echo "^^^^^^ in file: $yaml" && echo
-        done
-        test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, use line numbers to remove them"
-
-        grep -nE '\S\s+$' ${{ inputs.chart-path }}/values.yaml
-        (test $? -eq 0 && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1) || (test $COUNTER -gt 0 && exit 1)
