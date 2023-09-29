@@ -32,4 +32,4 @@ runs:
         test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, use line numbers to remove them"
 
         grep -nE '\S\s+$' ${{ inputs.chart-path }}/values.yaml
-        (test $? -eq 0 && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1) || (test $COUNTER -g 0 && exit 1)
+        (test $? -eq 0 && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1) || (test $COUNTER -gt 0 && exit 1)
