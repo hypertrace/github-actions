@@ -20,7 +20,7 @@ runs:
         helm lint ${{ inputs.chart-path }} ${{ inputs.extra-args }}
         helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
     - name: ensure no trailing spaces in config maps
-      shell: bash --noprofile --norc -e {0} # removing pipefail from default for hacking around grep exit code
+      shell: bash
       run: |
         configmaps=($(find ${{ inputs.chart-path }} -type f -regex '.*\.ya*ml' -exec grep -l "kind: ConfigMap" {} \;))
         COUNTER=0
@@ -28,9 +28,9 @@ runs:
         for yaml in "${configmaps[@]}"
         do
           echo $yaml
-          matches=$(grep -qc '\S\s+$' $yaml)
+          matches=$(grep -c --slient '\S\s+$' $yaml)
           if (( $matches > 0 )); then
-            grep -nqE '\S\s+$' $yaml
+            grep -nE --slient '\S\s+$' $yaml
             echo "^^^^^^ in file: $yaml"
             COUNTER=$((COUNTER+1))
           fi
