@@ -28,7 +28,7 @@ runs:
         for yaml in "${configmaps[@]}"
         do
             echo $yaml
-            matches=$(grep -c '\S\s+$' $yaml | tr a a)
+            matches=$(grep -c '\S\s+$' $yaml)
             echo $matches
             test $matches -ne 0 && (grep -nE '\S\s+$' $yaml || true) && echo "^^^^^^ in file: $yaml" && echo
         done
