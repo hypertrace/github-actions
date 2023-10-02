@@ -22,7 +22,9 @@ runs:
     - name: ensure no trailing spaces in config maps
       shell: bash
       run: |
+        echo $SHELL
         configmaps=($(find ${{ inputs.chart-path }} -type f -iregex '.*\.ya*ml' -exec grep -l "kind: ConfigMap" {} \;))
+        echo "got config maps ${configmaps[@]}"
         COUNTER=0
         for yaml in "${configmaps[@]}"
         do
