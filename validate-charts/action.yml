@@ -27,8 +27,8 @@ runs:
         echo "Checking these config maps for trailing spaces:"
         for yaml in "${configmaps[@]}"
         do
-            echo $yaml
-            (grep -nE '\S\s+$' $yaml && $((COUNTER++)) && echo "^^^^^^ in file: $yaml" ) || true
+          echo $yaml
+          (grep -nE '\S\s+$' $yaml &&  && echo "^^^^^^ in file: $yaml" && COUNTER=$((COUNTER+$(grep -qc '\S\s+$' $yaml)) ) || true
         done
         echo "final counter $COUNTER" && test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, use line numbers to remove them"
         exit 1
