@@ -24,6 +24,7 @@ runs:
       run: |
         configmaps=($(find ${{ inputs.chart-path }} -type f -regex '.*\.ya*ml' -exec grep -l "kind: ConfigMap" {} \;))
         COUNTER=0
+        echo "Checking these config maps for ${configmaps[@]}"
         for yaml in "${configmaps[@]}"
         do
             (grep -nE '\S\s+$' $yaml && gexit_code=0) || gexit_code=$?
