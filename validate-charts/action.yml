@@ -28,7 +28,8 @@ runs:
         for yaml in "${configmaps[@]}"
         do
           echo $yaml
-          if (( $(grep -qc '\S\s+$' $yaml) > 0 )); then
+          matches=$(grep -qc '\S\s+$' $yaml)
+          if (( $matches > 0 )); then
             grep -nqE '\S\s+$' $yaml
             echo "^^^^^^ in file: $yaml"
             COUNTER=$((COUNTER+1))
