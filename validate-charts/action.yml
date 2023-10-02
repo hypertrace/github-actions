@@ -22,7 +22,6 @@ runs:
     - name: ensure no trailing spaces in config maps
       shell: bash
       run: |
-        echo $SHELL
         configmaps=($(find ${{ inputs.chart-path }} -type f -iregex '.*\.ya*ml' -exec grep -l "kind: ConfigMap" {} \;))
         COUNTER=0
         for yaml in "${configmaps[@]}"
@@ -33,4 +32,4 @@ runs:
         test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, use line numbers to remove them"
 
         (grep -nE '\S\s+$' ${{ inputs.chart-path }}/values.yaml && gexit_code=0) || gexit_code=$?
-        (test $? -eq 0 && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1) || (test $COUNTER -gt 0 && exit 1)
+        (test $gexit_code -eq 0 && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1) || (test $COUNTER -gt 0 && exit 1)
