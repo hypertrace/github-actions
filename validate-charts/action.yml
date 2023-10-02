@@ -20,7 +20,7 @@ runs:
         helm lint ${{ inputs.chart-path }} ${{ inputs.extra-args }}
         helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
     - name: ensure no trailing spaces in config maps
-      shell: bash -e {0}
+      shell: bash -e {0,1,2}
       run: |
         echo $SHELL
         configmaps=($(find ${{ inputs.chart-path }} -type f -iregex '.*\.ya*ml' -exec grep -l "kind: ConfigMap" {} \;))
