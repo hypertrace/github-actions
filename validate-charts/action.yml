@@ -29,7 +29,7 @@ runs:
         do
           echo $yaml
           output=$(sed -n '\S\s+$' $yaml)
-          [ ! -z "$output" ] && COUNTER=((COUNTER++)) && echo $output
+          [ ! -z "$output" ] && COUNTER=$((COUNTER++)) && echo $output
         done
         echo "final counter $COUNTER" && test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, use line numbers to remove them"
         exit 1
