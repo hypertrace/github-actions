@@ -28,7 +28,7 @@ runs:
         for yaml in "${configmaps[@]}"
         do
             echo $yaml
-            (grep -nE '\S\s+$' $yaml && gexit_code=0 && echo "got exit $gexit_code") || gexit_code=$?
+            (grep -nE '\S\s+$' $yaml && gexit_code=0 && echo "got exit $gexit_code") || (echo "why run" && gexit_code=$?)
             echo "now exit $gexit_code"
             test $gexit_code -eq 0 && echo "now counter $COUNTER" && COUNTER=$((COUNTER+1)) && echo "^^^^^^ in file: $yaml" && echo
         done
