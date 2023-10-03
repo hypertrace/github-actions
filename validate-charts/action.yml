@@ -28,11 +28,14 @@ runs:
         for yaml in "${configmaps[@]}"
         do
           echo $yaml
-          output=$(sed -nE '/\S\s+$/p' $yaml)
-          [ ! -z "$output" ] && ((COUNTER++)) && echo $output
+          # we have to use sed for performing exists check because of complications dealing with grep exit code in non match
+          exists=$(sed -nE '/\S\s+$/p' $yaml)
+          [ ! -z "$exists" ] && ((COUNTER++)) && grep -nE '\S\s+$' $yaml
         done
         test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, please remove them"
+
         echo "Checking values.yaml for trailing spaces..."
-        output=$(sed -nE '/\S\s+$/p' ${{ inputs.chart-path }}/values.yaml)
-        [ ! -z "$output" ] && echo $output && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1
+        # we have to use sed for performing exists check because of complications dealing with grep exit code in non match
+        exists=$(sed -nE '/\S\s+$/p' ${{ inputs.chart-path }}/values.yaml)
+        [ ! -z "$exists" ] && grep -nE '\S\s+$' $yaml && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1
         (test $COUNTER -gt 0 && exit 1) || true
