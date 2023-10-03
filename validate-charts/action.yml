@@ -28,11 +28,10 @@ runs:
         for yaml in "${configmaps[@]}"
         do
           echo $yaml
-          output=$(sed -n '\S\s+$' $yaml)
-          [ ! -z "$output" ] && COUNTER=$((COUNTER++)) && echo $output
+          output=$(sed -nE '/\S\s+$/p' $yaml)
+          [ ! -z "$output" ] && $((COUNTER++)) && echo $output
         done
-        echo "final counter $COUNTER" && test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, use line numbers to remove them"
-        exit 1
-
-        matches=$(grep -c '\S\s+$' ${{ inputs.chart-path }}/values.yaml || true)
-        (test $matches -ne 0 && grep -nE '\S\s+$' ${{ inputs.chart-path }}/values.yaml && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1) || (test $COUNTER -gt 0 && exit 1) || true
+        test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, please remove them"
+        output=$(sed -nE '/\S\s+$/p' ${{ inputs.chart-path }}/values.yaml)
+        [ ! -z "$output" ] && echo $output && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1
+        (test $COUNTER -gt 0 && exit 1) || true
