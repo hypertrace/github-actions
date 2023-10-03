@@ -30,7 +30,7 @@ runs:
           echo $yaml
           # we have to use sed for performing exists check because of complications dealing with grep exit code in non match
           exists=$(sed -nE '/\S\s+$/p' $yaml)
-          [ ! -z "$exists" ] && ((COUNTER++)) && grep -nE '\S\s+$' $yaml
+          [ ! -z "$exists" ] && grep -nE '\S\s+$' $yaml && ((COUNTER++))
         done
         test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, please remove them"
 
