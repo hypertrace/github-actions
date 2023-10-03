@@ -38,6 +38,6 @@ runs:
         # we have to use sed for performing exists check because of complications dealing with grep exit code in non match
         exists=$(sed -nE '/\S\s+$/p' ${{ inputs.chart-path }}/values.yaml)
         [ ! -z "$exists" ] && grep -nE '\S\s+$' ${{ inputs.chart-path }}/values.yaml && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1
-        if (( counter > 0 )); then
+        if (( $COUNTER > 0 )); then
           exit 1
         fi
