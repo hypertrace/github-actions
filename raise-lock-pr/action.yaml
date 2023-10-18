@@ -10,7 +10,7 @@ runs:
     - name: Update lockfiles
       uses: hypertrace/github-actions/gradle@main
       with:
-        args: resolveAndLockAll --write-locks
+        args: resolveAndLockAll --write-locks --refresh-dependencies
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
