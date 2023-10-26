@@ -4,9 +4,9 @@ inputs:
   token:
     description: 'Github auth token with permissions to raise a PR'
     required: true
-  post-process:
+  lock-settings:
     description: 'shell command to run after updating lock files. Can be used to cleanup locks'
-    default: 'git status'
+    default: 'false'
 runs:
   using: composite
   steps:
@@ -14,9 +14,10 @@ runs:
       uses: hypertrace/github-actions/gradle@main
       with:
         args: resolveAndLockAll --write-locks --refresh-dependencies
-    - name: Post process
+    - name: Remove settings lock if needed
+      if: inputs.lock-settings == 'true'
       shell: bash
-      run: ${{ inputs.args }}
+      run: rm settings-gradle.lockfile
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
