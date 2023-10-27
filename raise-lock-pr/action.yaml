@@ -17,7 +17,7 @@ runs:
     - name: Remove settings lock if needed
       if: inputs.lock-settings != 'true'
       shell: bash
-      run: rm settings-gradle.lockfile
+      run: rm settings-gradle.lockfile || true
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
