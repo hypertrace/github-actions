@@ -15,7 +15,7 @@ runs:
       with:
         args: resolveAndLockAll --write-locks --refresh-dependencies
     - name: Remove settings lock if needed
-      if: inputs.lock-settings == 'true'
+      if: inputs.lock-settings != 'true'
       shell: bash
       run: rm settings-gradle.lockfile
     - name: Create Pull Request
