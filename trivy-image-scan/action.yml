@@ -90,6 +90,7 @@ runs:
         severity: ${{ inputs.severity }}
         ignore-unfixed: ${{ inputs.ignore-unfixed }}
         timeout: ${{ inputs.timeout }}
+        limit-severities-for-sarif: true
         exit-code: '1'
 
     - name: Upload Trivy scan results to GitHub Security tab
