@@ -93,6 +93,19 @@ runs:
         limit-severities-for-sarif: true
         exit-code: '1'
 
+    - name: Rerun Trivy vulnerability scanner with logging
+      if: failure() && inputs.output-mode != 'log'
+      uses: aquasecurity/trivy-action@master
+      with:
+        trivyignores: ${{ inputs.trivyignores }}
+        image-ref: ${{ inputs.image }}:${{ steps.tag.outputs.TRIVY_IMAGE_TAG }}
+        format: table
+        vuln-type: ${{ inputs.vuln-type }}
+        severity: ${{ inputs.severity }}
+        ignore-unfixed: ${{ inputs.ignore-unfixed }}
+        timeout: ${{ inputs.timeout }}
+        exit-code: '1'
+
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
       if: ${{ (success() || failure()) && inputs.output-mode == 'github' && inputs.category == '' }}
