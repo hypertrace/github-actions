@@ -10,12 +10,12 @@ inputs:
   ignore-unfixed:
     description: 'ignore unfixed vulnerabilities'
     required: true
-    default: 'false'
+    default: 'true'
   vuln-type:
     description: 'comma-separated list of vulnerability types (os,library)'
     required: true
     default: 'os,library'
-  severity:
+  severity:git pull
     description: 'severities of vulnerabilities to be displayed'
     required: true
     default: 'HIGH,CRITICAL'
