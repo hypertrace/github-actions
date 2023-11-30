@@ -15,7 +15,6 @@ inputs:
     description: 'comma-separated list of vulnerability types (os,library)'
     required: true
     default: 'os,library'
-  severity:git pull
     description: 'severities of vulnerabilities to be displayed'
     required: true
     default: 'HIGH,CRITICAL'
