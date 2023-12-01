@@ -32,6 +32,15 @@ inputs:
     description: String used by Code Scanning for matching the analyses
     required: false
     default: ''
+  skip-dirs: 
+    description: skip directories from scan
+    required: false
+    default: ''
+  skip-files: 
+    description: skip files from scan
+    required: false
+    default: ''
+
 runs:
   using: "composite"
   steps:
@@ -76,6 +85,8 @@ runs:
         severity: ${{ inputs.severity }}
         ignore-unfixed: ${{ inputs.ignore-unfixed }}
         timeout: ${{ inputs.timeout }}
+        skip-dirs: ${{ inputs.skip-dirs }}
+        skip-files: ${{ inputs.skip-files }}
         exit-code: '1'
 
     - name: Upload Trivy scan results to GitHub Security tab
