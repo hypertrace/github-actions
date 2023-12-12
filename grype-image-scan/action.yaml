@@ -58,6 +58,7 @@ runs:
         echo "GRYPE_FORMAT=$GRYPE_FORMAT" >> $GITHUB_OUTPUT
 
     - name: Scan image
+      id: grypescan
       uses: anchore/scan-action@v3
       with:
         image: ${{ inputs.image }}:${{ steps.tag.outputs.GRYPE_IMAGE_TAG }}
@@ -67,6 +68,10 @@ runs:
         only-fixed: ${{ inputs.only-fixed }}
         by-cve: ${{ inputs.by-cve }}
         vex: ${{ inputs.vex }}
+    
+     - name: Inspect action Json report
+       shell: bash
+       run: cat ${{ steps.grypescan.outputs.json }}
 
 
 
