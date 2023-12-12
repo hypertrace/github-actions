@@ -20,10 +20,6 @@ inputs:
     description: 'Include cve id instaed of ghsa '
     required: false
     default: 'false'
-  vex:
-    description: 'input vex files to include while scanning'
-    required: false
-    default: 'false'
   output-mode:
     description: 'output format to display , github and json format is supported'
     required: false
@@ -64,10 +60,9 @@ runs:
         image: ${{ inputs.image }}:${{ steps.tag.outputs.GRYPE_IMAGE_TAG }}
         fail-build: ${{ inputs.fail-build }}
         severity-cutoff: ${{ inputs.severity-cutoff }}
-        output-mode: ${{ steps.output.outputs.GRYPE_FORMAT }}
+        output-format: ${{ steps.output.outputs.GRYPE_FORMAT }}
         only-fixed: ${{ inputs.only-fixed }}
         by-cve: ${{ inputs.by-cve }}
-        vex: ${{ inputs.vex }}
     
     - name: Inspect action Json report
       shell: bash
