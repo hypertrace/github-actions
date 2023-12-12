@@ -69,9 +69,9 @@ runs:
         by-cve: ${{ inputs.by-cve }}
         vex: ${{ inputs.vex }}
     
-     - name: Inspect action Json report
-       shell: bash
-       run: cat ${{ steps.grypescan.outputs.json }}
+    - name: Inspect action Json report
+      shell: bash
+      run: cat ${{ steps.grypescan.outputs.json }}
 
 
 
