@@ -4,6 +4,9 @@ inputs:
   image:
     description: 'image to be scanned'
     required: true
+  tag:
+    description: 'image tag'
+    required: false
   only-fixed:
     description: 'include only fixed vulnerabilities'
     required: false
@@ -24,6 +27,7 @@ inputs:
     description: 'output format to display , github and json format is supported'
     required: false
     default: 'json'
+  
 
 runs:
   using: "composite"
@@ -63,6 +67,8 @@ runs:
         output-format: ${{ steps.output.outputs.GRYPE_FORMAT }}
         only-fixed: ${{ inputs.only-fixed }}
         by-cve: ${{ inputs.by-cve }}
+      continue-on-error: true
+
     
     - name: Inspect action Json report
       shell: bash
