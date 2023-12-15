@@ -75,7 +75,7 @@ runs:
       with:
         token: ${{ github.token }}
         name: Grype Image Scan Report
-        conclusion: ${{ steps.scan-result.outcome }}
+        conclusion: ${{ steps.grypescan.outcome }}
         output_text_description_file: ${{ steps.scan-result.outputs.json }}
         output: |
           {"summary": "Grype Image Scan Report"}
