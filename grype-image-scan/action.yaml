@@ -68,11 +68,30 @@ runs:
         only-fixed: ${{ inputs.only-fixed }}
         by-cve: ${{ inputs.by-cve }}
       continue-on-error: true
+    
+    - name: upload grype scan report
+      if: inputs.output-mode == 'json'
+      uses: LouisBrunner/checks-action@v1.6.1
+      with:
+        token: ${{ github.token }}
+        name: Grype Image Scan Report
+        conclusion: ${{ steps.scan-result.outcome }}
+        output_text_description_file: ${{ steps.scan-result.outputs.json }}
+        output: |
+          {"summary": "Grype Image Scan Report"}
 
     
     - name: Inspect action Json report
       shell: bash
       run: cat ${{ steps.grypescan.outputs.json }}
+    
+
+    
+    - name: fail on error
+      if: steps.grypescan.outcome != 'success'
+      run: exit 1
+
+    
 
 
 
