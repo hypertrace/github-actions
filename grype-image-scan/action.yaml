@@ -89,6 +89,7 @@ runs:
     
     - name: fail on error
       if: steps.grypescan.outcome != 'success'
+      shell: bash
       run: exit 1
 
     
