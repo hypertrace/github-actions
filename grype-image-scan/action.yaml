@@ -26,7 +26,7 @@ inputs:
   output-mode:
     description: 'output format to display , github and json format is supported'
     required: false
-    default: 'json'
+    default: 'table'
   
 
 runs:
@@ -52,8 +52,8 @@ runs:
         GRYPE_FORMAT=""
         if [ "${{ inputs.output-mode }}" = "github" ]; then
           GRYPE_FORMAT="sarif"
-        elif [ "${{ inputs.output-mode }}" = "json" ]; then
-          GRYPE_FORMAT="json"
+        elif [ "${{ inputs.output-mode }}" = "table" ]; then
+          GRYPE_FORMAT="table"
         fi
         echo "GRYPE_FORMAT=$GRYPE_FORMAT" >> $GITHUB_OUTPUT
 
