@@ -69,15 +69,6 @@ runs:
         by-cve: ${{ inputs.by-cve }}
       continue-on-error: true
     
-    - uses: actions/upload-artifact@v3
-      with:
-          name: Grype Image Scan Report
-          path: ${{ steps.grypescan.outputs.json }}
-
-    - name: Inspect action Json report
-      shell: bash
-      run: cat ${{ steps.grypescan.outputs.json }}
-    
     - name: fail on error
       if: steps.grypescan.outcome != 'success'
       shell: bash
