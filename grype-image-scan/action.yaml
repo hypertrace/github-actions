@@ -67,7 +67,5 @@ runs:
         output-format: ${{ steps.output.outputs.GRYPE_FORMAT }}
         only-fixed: ${{ inputs.only-fixed }}
         by-cve: ${{ inputs.by-cve }}
-    
-
 
 
