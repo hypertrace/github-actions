@@ -1,6 +1,12 @@
 name: Dependency Check
 description: 'OWASP Dependency Check'
 
+inputs:
+  nvd-api-key:
+    description: "NVD API Key"
+    required: false
+    default: ""
+
 runs:
   using: "composite"
   steps:
@@ -11,9 +17,16 @@ runs:
         submodules: recursive
 
     - name: Dependency Check
+      if: ${{ inputs.nvd-api-key == '' }}
       uses: hypertrace/github-actions/gradle@main
       with:
         args: dependencyCheckAggregate
+
+    - name: Dependency Check
+      if: ${{ inputs.nvd-api-key != '' }}
+      uses: hypertrace/github-actions/gradle@main
+      with:
+        args: dependencyCheckAggregate -Dnvd.api.key=${{ inputs.nvd-api-key }}
 
     - name: Upload dependency check report
       if: always()
