@@ -1,0 +1,71 @@
+name: Grype Image Scan
+description: 'Grype Image Scan'
+inputs:
+  image:
+    description: 'image to be scanned'
+    required: true
+  tag:
+    description: 'image tag'
+    required: false
+  only-fixed:
+    description: 'include only fixed vulnerabilities'
+    required: false
+    default: 'false'
+  fail-build:
+    description: 'fail build with custom settings such as custom severity cutoff'
+    required: false
+    default: 'true'
+  severity-cutoff:
+    description: 'build to be failed for vulnerabilities that have severity greater than or equal to the mentioned severity'
+    required: false
+    default: 'MEDIUM'
+  by-cve:
+    description: 'Include cve id instaed of ghsa '
+    required: false
+    default: 'false'
+  output-mode:
+    description: 'output format to display , github and json format is supported'
+    required: false
+    default: 'table'
+  
+
+runs:
+  using: "composite"
+  steps:
+    - uses: gradle/gradle-build-action@v2
+      if: ${{ inputs.tag == '' }}
+
+    - name: Determine container tag
+      id: tag
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.tag }}" ]; then
+          echo "GRYPE_IMAGE_TAG=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "GRYPE_IMAGE_TAG=$(./gradlew -q printDockerImageDefaultTag | head -1)" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Set up output values
+      id: output
+      shell: bash
+      run: |
+        GRYPE_FORMAT=""
+        if [ "${{ inputs.output-mode }}" = "github" ]; then
+          GRYPE_FORMAT="sarif"
+        elif [ "${{ inputs.output-mode }}" = "table" ]; then
+          GRYPE_FORMAT="table"
+        fi
+        echo "GRYPE_FORMAT=$GRYPE_FORMAT" >> $GITHUB_OUTPUT
+
+    - name: Scan image
+      id: grypescan
+      uses: anchore/scan-action@v3
+      with:
+        image: ${{ inputs.image }}:${{ steps.tag.outputs.GRYPE_IMAGE_TAG }}
+        fail-build: ${{ inputs.fail-build }}
+        severity-cutoff: ${{ inputs.severity-cutoff }}
+        output-format: ${{ steps.output.outputs.GRYPE_FORMAT }}
+        only-fixed: ${{ inputs.only-fixed }}
+        by-cve: ${{ inputs.by-cve }}
+
+
