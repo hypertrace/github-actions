@@ -18,7 +18,7 @@ inputs:
   severity-cutoff:
     description: 'build to be failed for vulnerabilities that have severity greater than or equal to the mentioned severity'
     required: false
-    default: 'MEDIUM'
+    default: 'high'
   by-cve:
     description: 'Include cve id instaed of ghsa '
     required: false
