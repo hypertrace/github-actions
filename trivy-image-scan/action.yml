@@ -39,7 +39,7 @@ runs:
   using: "composite"
   steps:
     - uses: gradle/gradle-build-action@v2
-      if: ${{ inputs.tag == '' }}
+      if: inputs.tag == ''
 
     - name: Determine container tag
       id: tag
@@ -66,7 +66,7 @@ runs:
         elif [ "${{ inputs.output-mode }}" = "log" ]; then
           TRIVY_FORMAT="table"
         fi
-        if [ "${{ github.event_name }}" = "pull_request" -a "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+        if [ "${{ github.event_name }}" = "pull_request" -a "${{ github.event.pull_request.head.repo.fork }}" ]; then
           TRIVY_FORMAT="table"
           TRIVY_OUTPUT=""
         fi
@@ -74,7 +74,7 @@ runs:
         echo "TRIVY_OUTPUT=$TRIVY_OUTPUT" >> $GITHUB_OUTPUT
 
     - name: Default ignore file if not exist
-      if: ${{ inputs.trivyignores == '.trivyignore' }}  # If a non-default ignore is passed, then we can assume it exists
+      if: inputs.trivyignores == '.trivyignore' # If a non-default ignore is passed, then we can assume it exists
       shell: bash
       run: |
         touch .trivyignore
@@ -108,13 +108,13 @@ runs:
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
-      if: ${{ (success() || failure()) && inputs.output-mode == 'github' && inputs.category == '' }}
+      if: (success() || failure()) && inputs.output-mode == 'github' && steps.output.outputs.TRIVY_OUTPUT != '' && inputs.category == ''
       with:
         sarif_file: ${{ steps.output.outputs.TRIVY_OUTPUT }}
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
-      if: ${{ (success() || failure()) && inputs.output-mode == 'github' && inputs.category != '' }}
+      if: (success() || failure()) && inputs.output-mode == 'github' && steps.output.outputs.TRIVY_OUTPUT != '' && inputs.category != ''
       with:
         sarif_file: ${{ steps.output.outputs.TRIVY_OUTPUT }}
         category: ${{ inputs.category }}
