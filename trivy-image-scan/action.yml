@@ -66,7 +66,7 @@ runs:
         elif [ "${{ inputs.output-mode }}" = "log" ]; then
           TRIVY_FORMAT="table"
         fi
-        if [ "${{ github.event_name }}" = "pull_request" -a "${{ github.event.pull_request.head.repo.fork }}" ]; then
+        if [ "${{ github.event_name }}" = "pull_request" -a "${{ github.event.pull_request.head.repo.fork }}" = "true" ]; then
           TRIVY_FORMAT="table"
           TRIVY_OUTPUT=""
         fi
