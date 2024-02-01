@@ -79,6 +79,11 @@ runs:
       run: |
         touch .trivyignore
 
+    - name: merge ignore files
+      shell: bash
+      run: |
+        cat $GITHUB_ACTION_PATH/.trivyignore >> .trivyignore
+
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
