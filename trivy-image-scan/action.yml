@@ -82,6 +82,7 @@ runs:
     - name: merge ignore files
       shell: bash
       run: |
+        echo >> .trivyignore # add new line to handle case of no trailing new line in exisiting ignore file
         cat $GITHUB_ACTION_PATH/.trivyignore >> .trivyignore
 
     - name: Run Trivy vulnerability scanner
