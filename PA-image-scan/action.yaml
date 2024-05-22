@@ -1,7 +1,7 @@
 name: Palo Alto Image Scan
 description: 'Palo Alto Image Scan'
 inputs:
-  image-name:
+  image_name:
     description: 'image to be scanned'
     required: true
   tag:
