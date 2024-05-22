@@ -46,12 +46,12 @@ runs:
         fi
 
     - name: Prisma Cloud image scan
-        id: scan
-        uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
-        with:
-          pcc_console_url: ${{ inputs.pcc_console_url }}
-          pcc_user: ${{ inputs.pcc_user }}
-          pcc_pass: ${{ inputs.pcc_pass }}
-          image_name: ${{ inputs.image_name }}:${{ steps.tag.outputs.PA_IMAGE_TAG }}
+      id: scan
+      uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
+      with:
+        pcc_console_url: ${{ inputs.pcc_console_url }}
+        pcc_user: ${{ inputs.pcc_user }}
+        pcc_pass: ${{ inputs.pcc_pass }}
+        image_name: ${{ inputs.image_name }}:${{ steps.tag.outputs.PA_IMAGE_TAG }}
 
 
