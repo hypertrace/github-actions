@@ -9,25 +9,25 @@ inputs:
     required: false
   pcc_console_url:
     description: 'Palo Alto console URL'
-    required: 'false'
+    required: false
   pcc_user:
     description: 'Palo Alto Access Key'
-    required: 'false'
+    required: false
   pcc_pass:
     description: 'Palo Alto Secret key'
-    required: 'false'
+    required: false
   project:
     description: 'Tenant project context for the command'
-    required: 'false'
+    required: false
   results_file:
     description: 'File to which scan results are written in JSON. Default pcc_scan_results.json'
-    required: 'false'
+    required: false
   sarif_file:
     description: 'File to which scan results are written in SARIF. Default pcc_scan_results.sarif.json'
-    required: 'false'
+    required: false
   twistcli_debug:
     description: 'Activate the debug flag for prisma cli (by default deactivated)'
-    required: 'false'
+    required: false
   
 runs:
   using: "composite"
