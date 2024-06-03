@@ -6,31 +6,44 @@ inputs:
     description: "NVD API Key"
     required: false
     default: ""
+  use-global-suppressions:
+    description: "Whether to use global suppression file in addition to the local suppression file (assumed name of owasp-suppression.xml at repo root)"
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
   steps:
+    - name: Setup suppressions
+      id: suppressions
+      shell: bash
+      run: |
+        if [ "${{ inputs.use-global-suppressions }}" = "true" ]; then
+          echo args=-Dsuppression.file=owasp-suppressions.xml,$GITHUB_ACTION_PATH/global-suppressions.xml >> $GITHUB_OUTPUT
+        else
+          echo args= >> $GITHUB_OUTPUT
+        fi
     - name: Check out code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         submodules: recursive
 
     - name: Dependency Check
-      if: ${{ inputs.nvd-api-key == '' }}
+      if: inputs.nvd-api-key == ''
       uses: hypertrace/github-actions/gradle@main
       with:
-        args: dependencyCheckAggregate
+        args: dependencyCheckAggregate ${{steps.suppressions.outputs.args}}
 
     - name: Dependency Check
-      if: ${{ inputs.nvd-api-key != '' }}
+      if: inputs.nvd-api-key != ''
       uses: hypertrace/github-actions/gradle@main
       with:
-        args: dependencyCheckAggregate -Dnvd.api.key=${{ inputs.nvd-api-key }}
+        args: dependencyCheckAggregate ${{steps.suppressions.outputs.args}} -Dnvd.api.key=${{ inputs.nvd-api-key }}
 
     - name: Upload dependency check report
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Dependency check report
         path: ${{github.workspace}}/build/reports
