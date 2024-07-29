@@ -27,4 +27,5 @@ runs:
         if [ ! -z "$output" ]; then
           echo "trailing spaces exist in helm chart after rending at below places, please fix:"
           echo $output
+          exit 1
         fi
