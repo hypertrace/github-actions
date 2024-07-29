@@ -12,32 +12,19 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: validate helm chart
+    - name: Validate Helm Chart
       shell: bash
       run: |
         helm version
         helm dependency update ${{ inputs.chart-path }}
         helm lint ${{ inputs.chart-path }} ${{ inputs.extra-args }}
         helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
-    - name: ensure no trailing spaces in config maps
+        
+    - name: Ensure no Trailing Spaces
       shell: bash
       run: |
-        configmaps=($(find ${{ inputs.chart-path }} -type f -regex '.*\.ya*ml' -exec grep -l "kind: ConfigMap" {} \;))
-        COUNTER=0
-        echo "Checking these config maps for trailing spaces..."
-        for yaml in "${configmaps[@]}"
-        do
-          echo $yaml
-          # we have to use sed for performing exists check because of complications dealing with grep exit code in non match
-          exists=$(sed -nE '/\S\s+$/p' $yaml)
-          [ ! -z "$exists" ] && grep -nE '\S\s+$' $yaml && COUNTER=$((COUNTER+1))
-        done
-        test $COUNTER -gt 0 && echo "$COUNTER config map yamls contain trailing spaces, please remove them"
-
-        echo "Checking values.yaml for trailing spaces..."
-        # we have to use sed for performing exists check because of complications dealing with grep exit code in non match
-        exists=$(sed -nE '/\S\s+$/p' ${{ inputs.chart-path }}/values.yaml)
-        [ ! -z "$exists" ] && grep -nE '\S\s+$' ${{ inputs.chart-path }}/values.yaml && echo "^^^^^^ values.yaml has trailing spaces, please remove them" && exit 1
-        if (( $COUNTER > 0 )); then
-          exit 1
+        output=$(helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }} | sed -nE '/\S\s+$/p')
+        if [ ! -z "$output" ]; then
+          echo "trailing spaces exist in helm chart after rending at below places, please fix:"
+          echo $output
         fi
