@@ -9,6 +9,10 @@ inputs:
     description: 'Arguments to be appended to lint and template commands such as "--set global.env=dev"'
     required: true
     default: ''
+  check-trailing-spaces:
+    description: 'Check no trailing spaces in helm template'
+    required: false
+    default: 'true'
 runs:
   using: "composite"
   steps:
@@ -21,6 +25,7 @@ runs:
         helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }}
         
     - name: Ensure no Trailing Spaces
+      if: inputs.check-trailing-spaces == 'true'
       shell: bash
       run: |
         output=$(helm template ${{ inputs.chart-path }} ${{ inputs.extra-args }} | sed -nE '/\S\s+$/p')
