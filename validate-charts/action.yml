@@ -11,7 +11,7 @@ inputs:
     default: ''
   check-trailing-spaces:
     description: 'Check no trailing spaces in helm template'
-    requrired: false
+    required: false
     default: 'true'
 runs:
   using: "composite"
