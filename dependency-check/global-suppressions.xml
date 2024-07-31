@@ -10,7 +10,7 @@
     <cpe>cpe:/a:processing:processing</cpe>
     <cpe>cpe:/a:avro_project:avro</cpe>
   </suppress>
-  <suppress until="2024-07-31Z">
+  <suppress until="2024-10-31Z">
     <notes><![CDATA[
    This CVE is declared fixed from 9.4.52, but the vuln db is not reflecting that. Suppress that specific version until
    db is updated.
@@ -110,5 +110,12 @@
     <packageUrl regex="true">^pkg:maven/org\.threeten/threetenbp@.*$</packageUrl>
     <cve>CVE-2024-23081</cve>
     <cve>CVE-2024-23082</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    CVE indicates 19.11 is a fixed version, but incorrectly matches it
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.graphql\-java/graphql\-java@19\.11$</packageUrl>
+    <vulnerabilityName>CVE-2024-40094</vulnerabilityName>
   </suppress>
 </suppressions>
