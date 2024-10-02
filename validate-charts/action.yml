@@ -55,5 +55,5 @@ runs:
       shell: bash
       run: |
         CHART_NAME=$(awk '/^name:/ {print $2}' ${{ inputs.chart-path }}/Chart.yaml)
-        helm template $CHART_NAME ${{ inputs.chart-path }} ${{ inputs.extra-args }} -f ${{ github.action_path }}/values.yaml > /tmp/${CHART_NAME}.yaml
+        helm template $CHART_NAME ${{ inputs.chart-path }} ${{ inputs.extra-args }} -f ${{ github.action_path }}/values.tpl > /tmp/${CHART_NAME}.yaml
         python ${{ github.action_path }}/check.py /tmp/${CHART_NAME}.yaml
