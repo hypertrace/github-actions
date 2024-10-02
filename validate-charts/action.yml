@@ -13,6 +13,10 @@ inputs:
     description: 'Check no trailing spaces in helm template'
     required: false
     default: 'true'
+  check-pod-template:
+    description: 'Check labels, annotations and security context in a pod'
+    required: false
+    default: 'true'
 runs:
   using: "composite"
   steps:
@@ -34,3 +38,23 @@ runs:
           echo $output
           exit 1
         fi
+
+    - name: Setup python
+      if: inputs.check-pod-template == 'true'
+      uses: actions/setup-python@v5 
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install pyyaml
+      if: inputs.check-pod-template == 'true'
+      shell: bash
+      run: pip install pyyaml
+
+    - name: Check pod template
+      if: inputs.check-pod-template == 'true'
+      shell: bash
+      run: |
+        CHART_NAME=$(awk '/^name:/ {print $2}' ${{ inputs.chart-path }}/Chart.yaml)
+        helm template $CHART_NAME ${{ inputs.chart-path }} ${{ inputs.extra-args }} -f values.yaml > /tmp/${CHART_NAME}.yaml
+        python check.py /tmp/${CHART_NAME}.yaml
