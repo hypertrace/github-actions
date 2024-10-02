@@ -54,6 +54,8 @@ runs:
       if: inputs.check-pod-template == 'true'
       shell: bash
       run: |
+        pwd
+        ls -lrt
         CHART_NAME=$(awk '/^name:/ {print $2}' ${{ inputs.chart-path }}/Chart.yaml)
         helm template $CHART_NAME ${{ inputs.chart-path }} ${{ inputs.extra-args }} -f values.yaml > /tmp/${CHART_NAME}.yaml
         python check.py /tmp/${CHART_NAME}.yaml
