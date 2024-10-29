@@ -105,7 +105,7 @@ runs:
       shell: sh
       run: |
         mkdir -p $GITHUB_WORKSPACE/.cache/trivy/java-db
-        oras pull ghcr.io/aquasecurity/trivy-java-db:1
+        oras pull public.ecr.aws/aquasecurity/trivy-db
         tar -xzf javadb.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/java-db
         rm javadb.tar.gz
 
