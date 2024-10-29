@@ -71,6 +71,36 @@ runs:
       shell: bash
       run: |
         touch .trivyignore
+     
+    - name: Setup oras
+      uses: oras-project/setup-oras@v1
+
+    - name: Get current date
+      shell: sh
+      id: date
+      run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+    - name: Download and extract the vulnerability DB
+      shell: sh
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/.cache/trivy/db
+        oras pull ghcr.io/aquasecurity/trivy-db:2
+        tar -xzf db.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/db
+        rm db.tar.gz
+
+    - name: Download and extract the Java DB
+      shell: sh
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/.cache/trivy/java-db
+        oras pull public.ecr.aws/aquasecurity/trivy-db
+        tar -xzf javadb.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/java-db
+        rm javadb.tar.gz
+
+    - name: Cache DBs
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/.cache/trivy
+        key: cache-trivy-${{ steps.date.outputs.date }}
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
