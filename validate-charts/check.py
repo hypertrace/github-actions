@@ -119,7 +119,7 @@ validated = True
 with open(filepath, 'r') as fd:
   docs = yaml.safe_load_all(fd)
   for doc in docs:
-    if doc['kind'] in ['Deployment', 'StatefulSet', 'Job', 'CronJob']:
+    if doc is not None and doc['kind'] is not None and doc['kind'] in ['Deployment', 'StatefulSet', 'Job', 'CronJob']:
       if not check_helm_template(doc):
         validated = False
 
