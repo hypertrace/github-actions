@@ -24,7 +24,7 @@
     <notes><![CDATA[
    This is a low severity (<4) vuln with no fix released supported in jetty 9. Revisit on jetty upgrade.
    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-http@9.*$</packageUrl>
+    <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty.*@9.*$</packageUrl>
     <vulnerabilityName>CVE-2024-6763</vulnerabilityName>
   </suppress>
   <suppress>
