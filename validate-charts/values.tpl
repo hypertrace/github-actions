@@ -111,10 +111,10 @@ redis:
 
 postgresql:
   primary:
-    commonPodAnnotations:
+    podAnnotations:
       traceable.ai/test: "1234567890"
 
-    commonPodLabels:
+    podLabels:
       applicationid: ABCD1234
 
     containerSecurityContext:
