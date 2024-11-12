@@ -98,6 +98,9 @@ runs:
         timeout: ${{ inputs.timeout }}
         limit-severities-for-sarif: true
         exit-code: '1'
+      env:
+        TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
+        TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db
 
     - name: Rerun Trivy vulnerability scanner with logging
       if: failure() && inputs.output-mode != 'log'
@@ -111,6 +114,9 @@ runs:
         ignore-unfixed: ${{ inputs.ignore-unfixed }}
         timeout: ${{ inputs.timeout }}
         exit-code: '1'
+      env:
+        TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
+        TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
