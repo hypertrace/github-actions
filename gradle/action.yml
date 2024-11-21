@@ -12,11 +12,16 @@ inputs:
     description: 'max heap to allocate to gradle'
     required: true
     default: '6g'
+  build-root-directory:
+    description: 'Path to the root directory of the build. Default is the root of the GitHub workspace.'
+    required: true
+    default: $GITHUB_WORKSPACE
 runs:
   using: "composite"
   steps: 
     - uses: gradle/gradle-build-action@v2
       with:
+        build-root-directory: ${{ inputs.build-root-directory }}
         arguments: |
           --info
           --max-workers=${{ inputs.max-workers }}
