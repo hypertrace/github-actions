@@ -5,13 +5,13 @@ commonPodLabels:
   applicationid: ABCD1234
 
 containerSecurityContext:
-  runAsViUser: 22222
+  runAsUser: 22222
   runAsGroup: 333333
   runAsNonRoot: true
   allowPrivilegeEscalation: false
 
 podSecurityContext:
-  runAsHBUser: 55555
+  runAsUser: 55555
   fsGroup: 44444
   runAsNonRoot: true
 
