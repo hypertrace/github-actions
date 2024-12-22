@@ -125,4 +125,10 @@
     <packageUrl regex="true">^pkg:maven/com\.graphql\-java/graphql\-java@19\.11$</packageUrl>
     <vulnerabilityName>CVE-2024-40094</vulnerabilityName>
   </suppress>
+  <suppress until="2025-01-31Z">
+    <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-servlets@11.0.20$
+    </packageUrl>
+    <vulnerabilityName>CVE-2024-6763</vulnerabilityName>
+    <vulnerabilityName>CVE-2024-8184</vulnerabilityName>
+  </suppress>
 </suppressions>
