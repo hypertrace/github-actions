@@ -140,4 +140,11 @@
     <packageUrl regex="true">^pkg:maven/ch\.qos\.logback/logback-core@.*$</packageUrl>
     <vulnerabilityName>CVE-2024-12798</vulnerabilityName>
   </suppress>
+  <suppress>
+   <notes><![CDATA[
+   file name: micrometer-registry-prometheus-simpleclient-1.14.4.jar
+   ]]></notes>
+   <packageUrl regex="true">^pkg:maven/io\.micrometer/micrometer-registry-prometheus-simpleclient@.*$</packageUrl>
+   <cpe>cpe:/a:prometheus:prometheus</cpe>
+</suppress>
 </suppressions>
