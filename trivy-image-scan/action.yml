@@ -118,10 +118,6 @@ runs:
         TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db
 
-    - name: ls
-      shell: bash
-      run: |
-            ls -al
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
       if: (success() || failure()) && inputs.output-mode == 'github' && steps.output.outputs.TRIVY_OUTPUT != '' && inputs.category == ''
