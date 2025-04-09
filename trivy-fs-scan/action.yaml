@@ -90,13 +90,13 @@ runs:
         exit-code: '1'
 
     - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: ${{ (success() || failure()) && inputs.output-mode == 'github' && inputs.category == '' }}
       with:
         sarif_file: ${{ steps.output.outputs.TRIVY_OUTPUT }}
 
     - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: ${{ (success() || failure()) && inputs.output-mode == 'github' && inputs.category != '' }}
       with:
         sarif_file: ${{ steps.output.outputs.TRIVY_OUTPUT }}

@@ -12,7 +12,7 @@ jobs:
     
     steps:
       - name: Checkout local repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       # See: https://github.com/ajv-validator/ajv-cli/blob/master/README.md
       - name: Validate GitHub Actions workflows

@@ -49,7 +49,7 @@ runs:
         path: ${{github.workspace}}/build/reports
 
     - name: Upload dependency check report to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
         sarif_file: ${{github.workspace}}/build/reports/dependency-check-report.sarif
