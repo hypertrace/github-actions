@@ -59,7 +59,7 @@ runs:
         TRIVY_OUTPUT=""
         if [ "${{ inputs.output-mode }}" = "github" ]; then
           TRIVY_FORMAT="sarif"
-          TRIVY_OUTPUT="'trivy-results.sarif'"
+          TRIVY_OUTPUT="trivy-results.sarif"
         elif [ "${{ inputs.output-mode }}" = "json" ]; then
           TRIVY_FORMAT="json"
           TRIVY_OUTPUT="trivy-results.json"
