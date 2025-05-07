@@ -24,10 +24,10 @@ runs:
     - name: Execute Gradle Command
       shell: bash
       run: |
-          ${{ inputs.gradle-executable }}
-          --info
-          --max-workers=${{ inputs.max-workers }}
-          -Dorg.gradle.jvmargs=-Xmx${{ inputs.max-heap }}
-          -Dorg.gradle.console=plain 
-          --continue
+          ${{ inputs.gradle-executable }} \
+          --info \
+          --max-workers=${{ inputs.max-workers }} \
+          -Dorg.gradle.jvmargs=-Xmx${{ inputs.max-heap }} \
+          -Dorg.gradle.console=plain \
+          --continue \
           ${{ inputs.args }}
