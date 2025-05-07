@@ -12,12 +12,19 @@ inputs:
     description: 'max heap to allocate to gradle'
     required: true
     default: '6g'
+  gradle-executable:
+    description: 'gradle wrapper executable'
+    required: true
+    default: './gradlew'
 runs:
   using: "composite"
-  steps: 
-    - uses: gradle/gradle-build-action@v2
-      with:
-        arguments: |
+  steps:
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+    - name: Execute Gradle Command
+      shell: bash
+      run: |
+          ${{ inputs.gradle-executable }}
           --info
           --max-workers=${{ inputs.max-workers }}
           -Dorg.gradle.jvmargs=-Xmx${{ inputs.max-heap }}
