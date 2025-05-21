@@ -59,7 +59,7 @@ runs:
 
     - name: Scan image
       id: grypescan
-      uses: anchore/scan-action@v3
+      uses: anchore/scan-action@v6
       with:
         image: ${{ inputs.image }}:${{ steps.tag.outputs.GRYPE_IMAGE_TAG }}
         fail-build: ${{ inputs.fail-build }}
