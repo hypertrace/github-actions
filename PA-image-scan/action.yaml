@@ -1,0 +1,57 @@
+name: Palo Alto Image Scan
+description: 'Palo Alto Image Scan'
+inputs:
+  image_name:
+    description: 'image to be scanned'
+    required: true
+  tag:
+    description: 'image tag'
+    required: false
+  pcc_console_url:
+    description: 'Palo Alto console URL'
+    required: false
+  pcc_user:
+    description: 'Palo Alto Access Key'
+    required: false
+  pcc_pass:
+    description: 'Palo Alto Secret key'
+    required: false
+  project:
+    description: 'Tenant project context for the command'
+    required: false
+  results_file:
+    description: 'File to which scan results are written in JSON. Default pcc_scan_results.json'
+    required: false
+  sarif_file:
+    description: 'File to which scan results are written in SARIF. Default pcc_scan_results.sarif.json'
+    required: false
+  twistcli_debug:
+    description: 'Activate the debug flag for prisma cli (by default deactivated)'
+    required: false
+  
+runs:
+  using: "composite"
+  steps:
+    - uses: gradle/gradle-build-action@v2
+      if: ${{ inputs.tag == '' }}
+
+    - name: Determine container tag
+      id: tag
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.tag }}" ]; then
+          echo "PA_IMAGE_TAG=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "PA_IMAGE_TAG=$(./gradlew -q printDockerImageDefaultTag | head -1)" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Prisma Cloud image scan
+      id: scan
+      uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
+      with:
+        pcc_console_url: ${{ inputs.pcc_console_url }}
+        pcc_user: ${{ inputs.pcc_user }}
+        pcc_pass: ${{ inputs.pcc_pass }}
+        image_name: ${{ inputs.image_name }}:${{ steps.tag.outputs.PA_IMAGE_TAG }}
+
+
