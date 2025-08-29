@@ -73,7 +73,7 @@ runs:
         touch .trivyignore
 
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
+      uses: aquasecurity/trivy-action@9ea583eb67910444b1f64abf338bd2e105a0a93d
       with:
         scan-type: 'fs'
         scan-ref: ${{ inputs.scan-ref }}
