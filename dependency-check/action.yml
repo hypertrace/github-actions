@@ -33,13 +33,13 @@ runs:
       if: inputs.nvd-api-key == ''
       uses: hypertrace/github-actions/gradle@main
       with:
-        args: dependencyCheckAggregate ${{steps.suppressions.outputs.args}}
+        args: dependencyCheckAggregate ${{steps.suppressions.outputs.args}} -Danalyzer.ossindex.enabled=false
 
     - name: Dependency Check
       if: inputs.nvd-api-key != ''
       uses: hypertrace/github-actions/gradle@main
       with:
-        args: dependencyCheckAggregate ${{steps.suppressions.outputs.args}} -Dnvd.api.key=${{ inputs.nvd-api-key }}
+        args: dependencyCheckAggregate ${{steps.suppressions.outputs.args}} -Dnvd.api.key=${{ inputs.nvd-api-key }} -Danalyzer.ossindex.enabled=false
 
     - name: Upload dependency check report
       if: always()
