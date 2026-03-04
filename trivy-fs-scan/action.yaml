@@ -88,6 +88,7 @@ runs:
         skip-dirs: ${{ inputs.skip-dirs }}
         skip-files: ${{ inputs.skip-files }}
         exit-code: '1'
+        version: 0.69.3
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
