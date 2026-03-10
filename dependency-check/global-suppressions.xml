@@ -127,11 +127,12 @@
   </suppress>
   <suppress>
     <notes><![CDATA[
-   file name: jetty-http-11.0.20.jar
+   Jetty 11.x is EOL - official fix only available in 12.x for these CVEs
    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-.*@.*$</packageUrl>
+    <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty\-.*@11\..*$</packageUrl>
     <cve>CVE-2024-8184</cve>
     <cve>CVE-2024-6763</cve>
+    <cve>CVE-2025-11143</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
