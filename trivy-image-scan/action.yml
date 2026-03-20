@@ -86,7 +86,7 @@ runs:
         cat $GITHUB_ACTION_PATH/.trivyignore >> .trivyignore
 
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4
+      uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
       with:
         trivyignores: ${{ inputs.trivyignores }}
         image-ref: ${{ inputs.image }}:${{ steps.tag.outputs.TRIVY_IMAGE_TAG }}
@@ -104,7 +104,7 @@ runs:
 
     - name: Rerun Trivy vulnerability scanner with logging
       if: failure() && inputs.output-mode != 'log'
-      uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4
+      uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
       with:
         trivyignores: ${{ inputs.trivyignores }}
         image-ref: ${{ inputs.image }}:${{ steps.tag.outputs.TRIVY_IMAGE_TAG }}
