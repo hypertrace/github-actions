@@ -142,6 +142,15 @@
     <vulnerabilityName>CVE-2024-12798</vulnerabilityName>
   </suppress>
   <suppress>
+    <notes><![CDATA[
+   CVE-2026-0994 is a Python-only protobuf vulnerability affecting json_format.ParseDict.
+   This project uses Java protobuf (protobuf-java and protobuf-java-util), which do not
+   include the vulnerable Python code path. Hence this is a false positive.
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.google\.protobuf/(protobuf\-java|protobuf\-java\-util)@.*$</packageUrl>
+    <cve>CVE-2026-0994</cve>
+  </suppress>
+  <suppress>
    <notes><![CDATA[
    file name: micrometer-registry-prometheus-simpleclient-1.14.4.jar
    ]]></notes>
