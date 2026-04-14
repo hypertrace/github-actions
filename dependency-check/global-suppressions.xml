@@ -156,5 +156,13 @@
    ]]></notes>
    <packageUrl regex="true">^pkg:maven/io\.micrometer/micrometer-registry-prometheus-simpleclient@.*$</packageUrl>
    <cpe>cpe:/a:prometheus:prometheus</cpe>
-</suppress>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   CVE-2026-33186 is a false positive. The CVE affects grpc-go (the Go implementation of gRPC),
+   not grpc-java (io.grpc). These are distinct projects sharing the same CPE identifier.
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.grpc/grpc-.*@.*$</packageUrl>
+    <cve>CVE-2026-33186</cve>
+  </suppress>
 </suppressions>
