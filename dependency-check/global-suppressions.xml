@@ -165,4 +165,14 @@
     <packageUrl regex="true">^pkg:maven/io\.grpc/grpc-.*@.*$</packageUrl>
     <cve>CVE-2026-33186</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+   CVE-2026-5795 affects Jetty JASPIAuthenticator (jetty-jaspi module).
+   Suppressing for all other Jetty modules.
+  ]]></notes>
+    <packageUrl regex="true">
+      ^pkg:maven/org\.eclipse\.jetty(\..*)?/(?!.*jaspi).*@.*$
+    </packageUrl>
+    <cve>CVE-2026-5795</cve>
+  </suppress>
 </suppressions>
