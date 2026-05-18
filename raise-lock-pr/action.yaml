@@ -17,6 +17,7 @@ runs:
       uses: hypertrace/github-actions/gradle@main
       with:
         args: resolveAndLockAll --write-locks --refresh-dependencies
+      max-workers: '4'
     - name: Remove settings lock if needed
       if: inputs.lock-settings != 'true'
       shell: bash
