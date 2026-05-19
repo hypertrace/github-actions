@@ -186,4 +186,13 @@
     <packageUrl regex="true">^pkg:maven/io\.prometheus/simpleclient.*@.*$</packageUrl>
     <cve>CVE-2026-42154</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+   CVE-2026-42582 affects netty-codec-http3 which only exists in the Netty 4.2.x line.
+   The 4.1.x line does not include HTTP/3 support. False positive due to shared CPE.
+   Advisory: https://github.com/netty/netty/security/advisories/GHSA-2c5c-chwr-9hqw
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.netty/(?!netty\-codec\-http3).*@.*$</packageUrl>
+    <cve>CVE-2026-42582</cve>
+  </suppress>
 </suppressions>
