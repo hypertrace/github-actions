@@ -188,6 +188,29 @@
   </suppress>
   <suppress>
     <notes><![CDATA[
+      CVE-2026-42154 affects the Prometheus server (Go binary), not Micrometer's Java
+      Prometheus registry. OWASP dependency-check incorrectly matches the Maven artifact
+      against cpe:2.3:a:prometheus:prometheus due to the shared "prometheus" name.
+      Ref: https://github.com/dependency-check/DependencyCheck/issues/8497
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.micrometer/micrometer-registry-prometheus@.*$</packageUrl>
+    <cve>CVE-2026-42154</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+      These CVEs affect non-Java OpenTelemetry implementations (Go, .NET, and C++).
+      OWASP dependency-check incorrectly matches the Prometheus Java client's OTel
+      tracer bridge against cpe:2.3:a:opentelemetry:opentelemetry.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.prometheus/prometheus-metrics-tracer-otel(-agent)?@.*$</packageUrl>
+    <cve>CVE-2026-41078</cve>
+    <cve>CVE-2026-39882</cve>
+    <cve>CVE-2026-40894</cve>
+    <cve>CVE-2026-41178</cve>
+    <cve>CVE-2026-44967</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
    CVE-2026-42582 affects netty-codec-http3 which only exists in the Netty 4.2.x line.
    The 4.1.x line does not include HTTP/3 support. False positive due to shared CPE.
    Advisory: https://github.com/netty/netty/security/advisories/GHSA-2c5c-chwr-9hqw
