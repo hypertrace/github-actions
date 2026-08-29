@@ -9,7 +9,7 @@ inputs:
     default: 'false'
   pr-title:
    description: 'Title for the generated PR'
-   default: 'Update gradle locks (Automated)'
+   default: 'NO-TICKET: Update gradle locks (Automated)'
 runs:
   using: composite
   steps:
